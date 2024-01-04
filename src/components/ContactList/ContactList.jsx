@@ -1,4 +1,7 @@
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteContact } from '../../redux/contactsSlice';
+import { selectActiveContacts } from '../../redux/selectors';
+
 import {
   ContactWrap,
   ContactListItem,
@@ -6,16 +9,22 @@ import {
   Span,
 } from './ContactList.styled';
 
-export const ContactList = ({ contacts, onDelete }) => {
+
+export const ContactList = () => {
+const activeContacts = useSelector(selectActiveContacts)
+
+const dispatch = useDispatch()
+
+
   return (
     <ContactWrap>
-      {contacts.map(({ id, name, number }) => {
+      {activeContacts.map(({ id, name, number }) => {
         return (
           <ContactListItem key={id}>
             <Span>{name}:</Span>
             <Span>{number}</Span>
 
-            <ContactListBtn type="button" onClick={() => onDelete(id)}>
+            <ContactListBtn type="button" onClick={() => dispatch(deleteContact(id))}>
               Delete
             </ContactListBtn>
           </ContactListItem>
@@ -23,15 +32,4 @@ export const ContactList = ({ contacts, onDelete }) => {
       })}
     </ContactWrap>
   );
-};
-
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    }).isRequired
-  ),
-  onDelete: PropTypes.func.isRequired,
 };

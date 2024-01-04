@@ -1,6 +1,8 @@
-import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { object, string } from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectContacts } from '../../redux/selectors';
+import { nanoid } from 'nanoid';
 
 import {
   FormStyled,
@@ -9,6 +11,7 @@ import {
   Label,
   Button,
 } from './ContactForm.styled';
+import { addContact } from '../../redux/contactsSlice';
 
 const schema = object().shape({
   name: string()
@@ -24,7 +27,10 @@ const schema = object().shape({
     .required('This field is required'),
 });
 
-export const ContactForm = ({ onAddContact }) => {
+export const ContactForm = () => {
+const contacts = useSelector(selectContacts)
+const dispatch = useDispatch();
+
   return (
     <Formik
       initialValues={{
@@ -32,9 +38,19 @@ export const ContactForm = ({ onAddContact }) => {
         number: '',
       }}
       validationSchema={schema}
-      onSubmit={(values, { resetForm }) => {
-        onAddContact({...values});
-        resetForm();
+      onSubmit={(values, actions) => {
+        const { name, number } = values;
+        if (
+          contacts.find(
+            contact =>
+              contact.name.toLowerCase() === name.toLowerCase() ||
+              contact.number === number
+          )
+        ) {
+          return alert('Phonebook already has this values');
+        }
+        dispatch(addContact({ name, number, id: nanoid() }));
+        actions.resetForm();
       }}
     >
       <FormStyled>
@@ -56,6 +72,3 @@ export const ContactForm = ({ onAddContact }) => {
   );
 };
 
-ContactForm.propTypes = {
-  onAddContact: PropTypes.func.isRequired,
-};
