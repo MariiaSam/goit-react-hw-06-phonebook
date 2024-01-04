@@ -9,12 +9,9 @@ import {
   Span,
 } from './ContactList.styled';
 
-
 export const ContactList = () => {
-const activeContacts = useSelector(selectActiveContacts)
-
-const dispatch = useDispatch()
-
+  const activeContacts = useSelector(selectActiveContacts);
+  const dispatch = useDispatch();
 
   return (
     <ContactWrap>
@@ -24,7 +21,10 @@ const dispatch = useDispatch()
             <Span>{name}:</Span>
             <Span>{number}</Span>
 
-            <ContactListBtn type="button" onClick={() => dispatch(deleteContact(id))}>
+            <ContactListBtn
+              type="button"
+              onClick={() => dispatch(deleteContact(id))}
+            >
               Delete
             </ContactListBtn>
           </ContactListItem>

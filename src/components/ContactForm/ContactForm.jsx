@@ -28,8 +28,8 @@ const schema = object().shape({
 });
 
 export const ContactForm = () => {
-const contacts = useSelector(selectContacts)
-const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
+  const dispatch = useDispatch();
 
   return (
     <Formik
@@ -38,17 +38,27 @@ const dispatch = useDispatch();
         number: '',
       }}
       validationSchema={schema}
-      onSubmit={(values, actions) => {
-        const { name, number } = values;
+      onSubmit={({ name, number }, actions) => {
         if (
           contacts.find(
-            contact =>
-              contact.name.toLowerCase() === name.toLowerCase() ||
-              contact.number === number
+            ({ name: oldName }) => oldName.toLowerCase() === name.toLowerCase()
           )
         ) {
-          return alert('Phonebook already has this values');
+          alert(`${name} is already in contacts`);
+          actions.resetForm();
+          return;
         }
+        if (
+          contacts.find(
+            ({ number: oldNumber }) =>
+              oldNumber.toLowerCase() === number.toLowerCase()
+          )
+        ) {
+          alert(`${number} is already in contacts`);
+          actions.resetForm();
+          return;
+        }
+        alert(`${name} added to your contact list`);
         dispatch(addContact({ name, number, id: nanoid() }));
         actions.resetForm();
       }}
@@ -71,4 +81,3 @@ const dispatch = useDispatch();
     </Formik>
   );
 };
-
