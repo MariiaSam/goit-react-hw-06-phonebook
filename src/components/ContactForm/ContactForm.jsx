@@ -3,6 +3,7 @@ import { object, string } from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectContacts } from '../../redux/selectors';
 import { nanoid } from 'nanoid';
+import { Report } from 'notiflix/build/notiflix-report-aio';
 
 import {
   FormStyled,
@@ -44,7 +45,11 @@ export const ContactForm = () => {
             ({ name: oldName }) => oldName.toLowerCase() === name.toLowerCase()
           )
         ) {
-          alert(`${name} is already in contacts`);
+          Report.success(
+            'Notiflix Success',
+            `${name} is already in contacts`,
+            'Okay'
+          );
           actions.resetForm();
           return;
         }
@@ -54,12 +59,20 @@ export const ContactForm = () => {
               oldNumber.toLowerCase() === number.toLowerCase()
           )
         ) {
-          alert(`${number} is already in contacts`);
+          Report.success(
+            'Notiflix Success',
+            `${number} is already in contacts`,
+            'Okay'
+          );
           actions.resetForm();
           return;
         }
-      
-        alert(`${name} added to your contact list`);
+        Report.success(
+          'Notiflix Success',
+          `${name} added to your contact list`,
+          'Okay'
+        );
+
         dispatch(addContact({ name, number, id: nanoid() }));
         actions.resetForm();
       }}

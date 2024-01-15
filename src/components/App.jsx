@@ -14,7 +14,7 @@ export const App = () => {
     <div>
       <Section title="Phonebook">
         <ContactForm />
-        {contacts.lengtg > 0 && (
+        {contacts.length > 0 && (
           <>
             <ContactsTitle title="Contacts" />
           </>
