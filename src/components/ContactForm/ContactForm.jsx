@@ -58,6 +58,7 @@ export const ContactForm = () => {
           actions.resetForm();
           return;
         }
+      
         alert(`${name} added to your contact list`);
         dispatch(addContact({ name, number, id: nanoid() }));
         actions.resetForm();
